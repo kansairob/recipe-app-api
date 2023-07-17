@@ -6,16 +6,12 @@ from django.urls import (
     include,
 )
 
-from rest_framework.routers import DefaultRouters
+from rest_framework.routers import DefaultRouter
 
 from recipe import views
 
 router = DefaultRouter()
 
-from recipe import views
-
-
-router = DefaultRouter()
 router.register('recipes', views.RecipeViewSet)
 
 app_name = 'recipe'

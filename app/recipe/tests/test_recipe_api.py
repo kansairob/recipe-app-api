@@ -24,10 +24,10 @@ def detail_url(recipe_id):
 
 def create_recipe(user, **params):
     """Create and return a sample recipe."""
-    defaults =  {
+    defaults = {
         'title': 'Sample recipe title',
         'time_minutes': 22,
-        'price': Decimal(5.25),
+        'price': Decimal('5.25'),
         'description': 'Sample description',
         'link': 'http://example.com/recipe.pdf'
     }
@@ -57,7 +57,7 @@ class PrivateRecipeAPITests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user(email='user@example.com', password='testpass123')
+        self.user = create_user(email='user@example.com', password='test123')
         self.client.force_authenticate(self.user)
 
     def test_retrieve_recipes(self):
@@ -92,7 +92,7 @@ class PrivateRecipeAPITests(TestCase):
         url = detail_url(recipe.id)
         res = self.client.get(url)
 
-        serializer = RecipeSerializer(recipe)
+        serializer = RecipeDetailSerializer(recipe)
         self.assertEqual(res.data, serializer.data)
 
     def test_create_recipe(self):
@@ -100,7 +100,7 @@ class PrivateRecipeAPITests(TestCase):
         payload = {
             'title': 'Sample recipe',
             'time_minutes': 30,
-            'price': Decimal('5.99')
+            'price': Decimal('5.99'),
         }
         res = self.client.post(RECIPES_URL, payload) # api/recipes/recipe
 
@@ -135,7 +135,7 @@ class PrivateRecipeAPITests(TestCase):
             user=self.user,
             title='Sample recipe title',
             link='https://example.com/recipe.pdf',
-            description='Sample recipe description.'
+            description='Sample recipe description.',
         )
 
         payload = {
@@ -143,7 +143,7 @@ class PrivateRecipeAPITests(TestCase):
             'link': 'https://example.com/new-recipe.pdf',
             'description': 'New recipe description',
             'time_minutes': 10,
-            'price': Decimal(2.50)
+            'price': Decimal('2.50'),
         }
         url = detail_url(recipe.id)
         res = self.client.put(url, payload)
@@ -154,12 +154,12 @@ class PrivateRecipeAPITests(TestCase):
             self.assertEqual(getattr(recipe, k), v)
         self.assertEqual(recipe.user, self.user)
 
-    def test_updates_user_returns_error(self):
+    def test_update_user_returns_error(self):
         """Test changing the recipe user results in an error."""
         new_user = create_user(email='user2@example.com', password='test123')
         recipe = create_recipe(user=self.user)
 
-        payload= {'user': new_user.id}
+        payload = {'user': new_user.id}
         url = detail_url(recipe.id)
         self.client.patch(url, payload)
 

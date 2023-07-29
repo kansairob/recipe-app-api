@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from core import models
 
 
-class UserAdmin(BaseUserdmin):
+class UserAdmin(BaseUserAdmin):
     """Define the admin pages for users."""
     ordering = ['id']
     list_display = ['email', 'name']
@@ -21,7 +21,7 @@ class UserAdmin(BaseUserdmin):
                 'fields': (
                     'is_active',
                     'is_staff',
-                    'is_superuser'
+                    'is_superuser',
                 )
             }
         ),
